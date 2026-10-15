@@ -1,0 +1,15 @@
+name: Snyk Container Security Scan
+
+on: push: branches: [main] pull_request: branches: [main]
+
+workflow_dispatch:
+
+jobs: snyk-container-scan: name: Scan container for vulnerabilities runs-on: ubuntu-latest
+
+steps: - name: Checkout repository uses: actions/checkout@v4
+
+- name: Build Docker image run: docker build -t my-app:${{ github.sha }} .
+
+- name: Scan image with Snyk uses: snyk/actions/docker@master env: SNYKTOKEN: 
+secrets.SNYKTOKENwith:image:my−app:
+{{ github.sha }} args: --severity-threshold=high
